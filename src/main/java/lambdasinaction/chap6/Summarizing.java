@@ -1,14 +1,16 @@
 package lambdasinaction.chap6;
 
-import java.util.*;
-import java.util.function.*;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.IntSummaryStatistics;
+import java.util.function.BinaryOperator;
 
 import static java.util.stream.Collectors.*;
 import static lambdasinaction.chap6.Dish.menu;
 
 public class Summarizing {
 
-    public static void main(String ... args) {
+    public static void main(String... args) {
         System.out.println("Nr. of dishes: " + howManyDishes());
         System.out.println("The most caloric dish is: " + findMostCaloricDish());
         System.out.println("The most caloric dish is: " + findMostCaloricDishUsingComparator());
@@ -24,8 +26,24 @@ public class Summarizing {
         return menu.stream().collect(counting());
     }
 
+    private static long howManyDishesWithCount() {
+        return menu.stream().count();
+    }
+
+    private static long howManyDishesWithMapReduce() {
+        return menu.stream().map(e -> 1).reduce(0, Integer::sum);
+    }
+
+    private static long howManyDishesWithSize() {
+        return menu.size();
+    }
+
     private static Dish findMostCaloricDish() {
         return menu.stream().collect(reducing((d1, d2) -> d1.getCalories() > d2.getCalories() ? d1 : d2)).get();
+    }
+
+    private static Dish findMostCaloricDishWithReduce() {
+        return menu.stream().reduce(BinaryOperator.maxBy(Comparator.comparing(Dish::getCalories))).orElse(null);
     }
 
     private static Dish findMostCaloricDishUsingComparator() {
@@ -38,12 +56,24 @@ public class Summarizing {
         return menu.stream().collect(summingInt(Dish::getCalories));
     }
 
+    private static int calculateTotalCaloriesWithIntStream() {
+        return menu.stream().mapToInt(Dish::getCalories).sum();
+    }
+
     private static Double calculateAverageCalories() {
         return menu.stream().collect(averagingInt(Dish::getCalories));
     }
 
+    private static Double calculateAverageCaloriesWithIntStream() {
+        return menu.stream().mapToInt(Dish::getCalories).average().orElse(0.0);
+    }
+
     private static IntSummaryStatistics calculateMenuStatistics() {
         return menu.stream().collect(summarizingInt(Dish::getCalories));
+    }
+
+    private static IntSummaryStatistics calculateMenuStatisticsWithIntStream() {
+        return menu.stream().mapToInt(Dish::getCalories).summaryStatistics();
     }
 
     private static String getShortMenu() {

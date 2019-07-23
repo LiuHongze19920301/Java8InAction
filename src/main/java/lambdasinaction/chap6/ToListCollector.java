@@ -34,4 +34,42 @@ public class ToListCollector<T> implements Collector<T, List<T>, List<T>> {
     public Set<Characteristics> characteristics() {
         return Collections.unmodifiableSet(EnumSet.of(IDENTITY_FINISH, CONCURRENT));
     }
+
+    public static class MyListCollector<T> implements Collector<T, List<T>, List<T>> {
+
+        @Override
+        public Supplier<List<T>> supplier() {
+            return ArrayList::new;
+        }
+
+        @Override
+        public BiConsumer<List<T>, T> accumulator() {
+            return List::add;
+        }
+
+        @Override
+        public BinaryOperator<List<T>> combiner() {
+            return (left, right) -> {
+                if (left == null) {
+                    return right;
+                }
+                if (right == null) {
+                    return left;
+                }
+                left.addAll(right);
+                return left;
+            };
+        }
+
+        @Override
+        public Function<List<T>, List<T>> finisher() {
+            return Function.identity();
+        }
+
+        @Override
+        public Set<Characteristics> characteristics() {
+            return Collections.unmodifiableSet(EnumSet.of(IDENTITY_FINISH, CONCURRENT));
+        }
+    }
+
 }
