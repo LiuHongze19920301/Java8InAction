@@ -1,7 +1,7 @@
 package lambdasinaction.chap7;
 
-import java.util.concurrent.RecursiveTask;
 import java.util.concurrent.ForkJoinTask;
+import java.util.concurrent.RecursiveTask;
 import java.util.stream.LongStream;
 
 import static lambdasinaction.chap7.ParallelStreamsHarness.FORK_JOIN_POOL;
@@ -30,9 +30,9 @@ public class ForkJoinSumCalculator extends RecursiveTask<Long> {
         if (length <= THRESHOLD) {
             return computeSequentially();
         }
-        ForkJoinSumCalculator leftTask = new ForkJoinSumCalculator(numbers, start, start + length/2);
+        ForkJoinSumCalculator leftTask = new ForkJoinSumCalculator(numbers, start, start + length / 2);
         leftTask.fork();
-        ForkJoinSumCalculator rightTask = new ForkJoinSumCalculator(numbers, start + length/2, end);
+        ForkJoinSumCalculator rightTask = new ForkJoinSumCalculator(numbers, start + length / 2, end);
         Long rightResult = rightTask.compute();
         Long leftResult = leftTask.join();
         return leftResult + rightResult;

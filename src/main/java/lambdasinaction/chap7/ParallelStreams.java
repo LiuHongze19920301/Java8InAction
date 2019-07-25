@@ -13,19 +13,19 @@ public class ParallelStreams {
     }
 
     public static long sequentialSum(long n) {
-        return Stream.iterate(1L, i -> i + 1).limit(n).reduce(Long::sum).get();
+        return Stream.iterate(1L, i -> i + 1).limit(n).reduce(Long::sum).orElse(0L);
     }
 
     public static long parallelSum(long n) {
-        return Stream.iterate(1L, i -> i + 1).limit(n).parallel().reduce(Long::sum).get();
+        return Stream.iterate(1L, i -> i + 1).limit(n).parallel().reduce(Long::sum).orElse(0L);
     }
 
     public static long rangedSum(long n) {
-        return LongStream.rangeClosed(1, n).reduce(Long::sum).getAsLong();
+        return LongStream.rangeClosed(1, n).reduce(Long::sum).orElse(0L);
     }
 
     public static long parallelRangedSum(long n) {
-        return LongStream.rangeClosed(1, n).parallel().reduce(Long::sum).getAsLong();
+        return LongStream.rangeClosed(1, n).parallel().reduce(Long::sum).orElse(0L);
     }
 
     public static long sideEffectSum(long n) {

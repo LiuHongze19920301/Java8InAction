@@ -1,19 +1,26 @@
 package lambdasinaction.chap7;
 
-import java.util.*;
-import java.util.function.*;
-import java.util.stream.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Spliterator;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 public class WordCount {
 
     public static final String SENTENCE =
             " Nel   mezzo del cammin  di nostra  vita " +
-            "mi  ritrovai in una  selva oscura" +
-            " che la  dritta via era   smarrita ";
+                    "mi  ritrovai in una  selva oscura" +
+                    " che la  dritta via era   smarrita ";
 
-    public static void main(String[] args) {
-        System.out.println("Found " + countWordsIteratively(SENTENCE) + " words");
-        System.out.println("Found " + countWords(SENTENCE) + " words");
+    public static void main(String[] args) throws Exception {
+        String text = Files.lines(Paths.get("/Users/leo/IdeaProjects/java8/Java8InAction/src/main/java/lambdasinaction/chap7/words.txt"))
+                .collect(Collectors.joining(" "));
+
+        System.out.println("Found " + countWordsIteratively(text) + " words");
+        System.out.println("Found " + countWords(text) + " words");
     }
 
     public static int countWordsIteratively(String s) {
@@ -41,8 +48,8 @@ public class WordCount {
 
     private static int countWords(Stream<Character> stream) {
         WordCounter wordCounter = stream.reduce(new WordCounter(0, true),
-                                                WordCounter::accumulate,
-                                                WordCounter::combine);
+                WordCounter::accumulate,
+                WordCounter::combine);
         return wordCounter.getCounter();
     }
 
@@ -59,7 +66,7 @@ public class WordCount {
             if (Character.isWhitespace(c)) {
                 return lastSpace ? this : new WordCounter(counter, true);
             } else {
-                return lastSpace ? new WordCounter(counter+1, false) : this;
+                return lastSpace ? new WordCounter(counter + 1, false) : this;
             }
         }
 

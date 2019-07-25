@@ -52,9 +52,9 @@ public class PartitionPrimeNumbers {
 
         @Override
         public Supplier<Map<Boolean, List<Integer>>> supplier() {
-            return () -> new HashMap<Boolean, List<Integer>>() {{
-                put(true, new ArrayList<Integer>());
-                put(false, new ArrayList<Integer>());
+            return () -> new HashMap<>() {{
+                put(true, new ArrayList<>());
+                put(false, new ArrayList<>());
             }};
         }
 
