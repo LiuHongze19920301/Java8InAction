@@ -12,10 +12,10 @@ import java.util.stream.Stream;
 public class BestPriceFinder {
 
     private final List<Shop> shops = Arrays.asList(new Shop("BestPrice"),
-                                                   new Shop("LetsSaveBig"),
-                                                   new Shop("MyFavoriteShop"),
-                                                   new Shop("BuyItAll"),
-                                                   new Shop("ShopEasy"));
+            new Shop("LetsSaveBig"),
+            new Shop("MyFavoriteShop"),
+            new Shop("BuyItAll"),
+            new Shop("ShopEasy"));
 
     private final Executor executor = Executors.newFixedThreadPool(shops.size(), new ThreadFactory() {
         @Override
@@ -44,7 +44,7 @@ public class BestPriceFinder {
 
     public List<String> findPricesFuture(String product) {
         List<CompletableFuture<String>> priceFutures = findPricesStream(product)
-                .collect(Collectors.<CompletableFuture<String>>toList());
+                .collect(Collectors.toList());
 
         return priceFutures.stream()
                 .map(CompletableFuture::join)

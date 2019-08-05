@@ -1,9 +1,9 @@
 package lambdasinaction.chap11;
 
+import java.util.Random;
+
 import static lambdasinaction.chap11.Util.delay;
 import static lambdasinaction.chap11.Util.format;
-
-import java.util.Random;
 
 public class Shop {
 

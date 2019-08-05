@@ -56,7 +56,9 @@ public class NumericStreams {
         generateEnhance();
         System.out.println("=====================");
         generateFibonacci();
-
+        System.out.println("=====================");
+        testJava9Stream();
+        System.out.println("=====================");
     }
 
     public static boolean isPerfectSquare(int n) {
@@ -81,5 +83,22 @@ public class NumericStreams {
                 .map(String::valueOf)
                 .collect(Collectors.joining(","));
         System.out.println(numbers);
+    }
+
+    public static void testJava9Stream() {
+        Stream.of("a", "b", "c", "", "d", "e")
+                .takeWhile(s -> !s.isEmpty())
+                .forEach(System.out::print);
+        System.out.println();
+        Stream.of("a", "b", "c", "", "d", "e", "", "f")
+                .dropWhile(s -> !s.isEmpty())
+                .forEach(System.out::print);
+        System.out.println();
+        IntStream.iterate(3, x -> x < 30, x -> x + 3).forEach(System.out::println);
+        System.out.println();
+        long count = Stream.ofNullable(100).count();
+        System.out.println(count);
+        long nullCount = Stream.ofNullable(null).count();
+        System.out.println(nullCount);
     }
 }
