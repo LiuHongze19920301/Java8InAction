@@ -34,7 +34,13 @@ public class Dish {
         return type;
     }
 
-    public enum Type { MEAT, FISH, OTHER }
+    public Grouping.CaloricLevel ensureCaloricLevel() {
+        if (getCalories() <= 400) return Grouping.CaloricLevel.DIET;
+        else if (getCalories() <= 700) return Grouping.CaloricLevel.NORMAL;
+        else return Grouping.CaloricLevel.FAT;
+    }
+
+    public enum Type {MEAT, FISH, OTHER}
 
     @Override
     public String toString() {
@@ -42,7 +48,7 @@ public class Dish {
     }
 
     public static final List<Dish> menu =
-            asList( new Dish("pork", false, 800, Dish.Type.MEAT),
+            asList(new Dish("pork", false, 800, Dish.Type.MEAT),
                     new Dish("beef", false, 700, Dish.Type.MEAT),
                     new Dish("chicken", false, 400, Dish.Type.MEAT),
                     new Dish("french fries", true, 530, Dish.Type.OTHER),

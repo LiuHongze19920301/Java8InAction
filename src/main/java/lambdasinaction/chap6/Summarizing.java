@@ -1,6 +1,5 @@
 package lambdasinaction.chap6;
 
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.IntSummaryStatistics;
 import java.util.function.BinaryOperator;

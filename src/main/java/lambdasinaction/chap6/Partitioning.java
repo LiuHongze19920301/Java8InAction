@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.Optional;
 
 import static java.util.Comparator.comparingInt;
-import static java.util.Comparator.naturalOrder;
 import static java.util.stream.Collectors.*;
 import static lambdasinaction.chap6.Dish.menu;
 
