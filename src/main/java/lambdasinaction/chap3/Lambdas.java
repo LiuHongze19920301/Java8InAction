@@ -1,73 +1,81 @@
 package lambdasinaction.chap3;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
 
 public class Lambdas {
-	public static void main(String ...args){
 
-		// Simple example
-		Runnable r = () -> System.out.println("Hello!");
-		r.run();
+    public static void main(String... args) {
 
-		// Filtering with lambdas
-		List<Apple> inventory = Arrays.asList(new Apple(80,"green"), new Apple(155, "green"), new Apple(120, "red"));
+        // Simple example
+        Runnable r = () -> System.out.println("Hello!");
+        r.run();
 
-		// [Apple{color='green', weight=80}, Apple{color='green', weight=155}]	
-		List<Apple> greenApples = filter(inventory, (Apple a) -> "green".equals(a.getColor()));
-		System.out.println(greenApples);
+        // Filtering with lambdas
+        List<Apple> inventory = Arrays.asList(new Apple(80, "green"), new Apple(155, "green"), new Apple(120, "red"));
+
+        // [Apple{color='green', weight=80}, Apple{color='green', weight=155}]
+        List<Apple> greenApples = filter(inventory, (Apple a) -> "green".equals(a.getColor()));
+        System.out.println(greenApples);
 
 
-		Comparator<Apple> c = (Apple a1, Apple a2) -> a1.getWeight().compareTo(a2.getWeight());
+        Comparator<Apple> c = (Apple a1, Apple a2) -> a1.getWeight().compareTo(a2.getWeight());
 
-		// [Apple{color='green', weight=80}, Apple{color='red', weight=120}, Apple{color='green', weight=155}]
-		inventory.sort(c);
-		System.out.println(inventory);
-	}
+        Comparator<Apple> c1 = (a1, a2) -> a1.getWeight().compareTo(a2.weight);
 
-	public static List<Apple> filter(List<Apple> inventory, ApplePredicate p){
-		List<Apple> result = new ArrayList<>();
-		for(Apple apple : inventory){
-			if(p.test(apple)){
-				result.add(apple);
-			}
-		}
-		return result;
-	}   
+        Comparator<Apple> c2 = Comparator.comparing(Apple::getWeight);
 
-	public static class Apple {
-		private int weight = 0;
-		private String color = "";
+        // [Apple{color='green', weight=80}, Apple{color='red', weight=120}, Apple{color='green', weight=155}]
+        inventory.sort(c);
+        System.out.println(inventory);
+    }
 
-		public Apple(int weight, String color){
-			this.weight = weight;
-			this.color = color;
-		}
+    public static List<Apple> filter(List<Apple> inventory, ApplePredicate p) {
+        List<Apple> result = new ArrayList<>();
+        for (Apple apple : inventory) {
+            if (p.test(apple)) {
+                result.add(apple);
+            }
+        }
+        return result;
+    }
 
-		public Integer getWeight() {
-			return weight;
-		}
+    public static class Apple {
+        private int weight = 0;
+        private String color = "";
 
-		public void setWeight(Integer weight) {
-			this.weight = weight;
-		}
+        public Apple(int weight, String color) {
+            this.weight = weight;
+            this.color = color;
+        }
 
-		public String getColor() {
-			return color;
-		}
+        public Integer getWeight() {
+            return weight;
+        }
 
-		public void setColor(String color) {
-			this.color = color;
-		}
+        public void setWeight(Integer weight) {
+            this.weight = weight;
+        }
 
-		public String toString() {
-			return "Apple{" +
-					"color='" + color + '\'' +
-					", weight=" + weight +
-					'}';
-		}
-	}
+        public String getColor() {
+            return color;
+        }
 
-	interface ApplePredicate{
-		public boolean test(Apple a);
-	}
+        public void setColor(String color) {
+            this.color = color;
+        }
+
+        public String toString() {
+            return "Apple{" +
+                    "color='" + color + '\'' +
+                    ", weight=" + weight +
+                    '}';
+        }
+    }
+
+    interface ApplePredicate {
+        boolean test(Apple a);
+    }
 }

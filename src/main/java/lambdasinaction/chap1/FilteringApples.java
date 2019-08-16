@@ -1,9 +1,8 @@
 package lambdasinaction.chap1;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class FilteringApples {
 
@@ -24,9 +23,21 @@ public class FilteringApples {
         List<Apple> greenApples = filterApples(inventory, FilteringApples::isGreenApple);
         System.out.println(greenApples);
 
+        List<Apple> greenTypeApples = filterTypes(inventory, GREEN_APPLE_PREDICATE);
+        System.out.println(greenTypeApples);
+
+        List<Apple> greenTypesStreamApples = filterTypesWithStream(inventory, GREEN_APPLE_PREDICATE);
+        System.out.println(greenTypesStreamApples);
+
         // [Apple{color='green', weight=155, height=0.7}, Apple{color='brown', weight=180, height=0.5}]
         List<Apple> heavyApples = filterApples(inventory, FilteringApples::isHeavyApple);
         System.out.println(heavyApples);
+
+        List<Apple> heavyTypeApples = filterTypes(inventory, HEAVY_APPLE_PREDICATE);
+        System.out.println(heavyTypeApples);
+
+        List<Apple> heavyTypesStreamApples = filterTypesWithStream(inventory, HEAVY_APPLE_PREDICATE);
+        System.out.println(heavyTypesStreamApples);
 
         // [Apple{color='green', weight=80, height=0.8}, Apple{color='green', weight=155, height=0.7}]
         List<Apple> greenApples2 = filterApples(inventory, apple -> "green".equals(apple.getColor()));
@@ -53,19 +64,19 @@ public class FilteringApples {
 
     }
 
-    public static boolean isHighPlant(Plant plant) {
+    private static boolean isHighPlant(Plant plant) {
         return plant.height > 0.6;
     }
 
-    public static boolean isGreenApple(Apple apple) {
+    private static boolean isGreenApple(Apple apple) {
         return "green".equals(apple.getColor());
     }
 
-    public static boolean isHeavyApple(Apple apple) {
+    private static boolean isHeavyApple(Apple apple) {
         return apple.getWeight() > 150;
     }
 
-    public static List<Apple> filterApples(List<Apple> inventory, Predicate<? super Apple> p) {
+    private static List<Apple> filterApples(List<Apple> inventory, Predicate<? super Apple> p) {
         List<Apple> result = new ArrayList<>();
         for (Apple apple : inventory) {
             if (p.test(apple)) {
@@ -73,6 +84,32 @@ public class FilteringApples {
             }
         }
         return result;
+    }
+
+    private static <T> List<T> filterTypes(List<T> types, Predicate<? super T> predicate) {
+        if (Objects.isNull(types)) {
+            return null;
+        }
+        if (types.isEmpty()) {
+            return Collections.emptyList();
+        }
+        List<T> result = new ArrayList<>();
+        for (T type : types) {
+            if (predicate.test(type)) {
+                result.add(type);
+            }
+        }
+        return result;
+    }
+
+    private static <T> List<T> filterTypesWithStream(List<T> types, Predicate<? super T> predicate) {
+        if (Objects.isNull(types)) {
+            return null;
+        }
+        if (types.isEmpty()) {
+            return Collections.emptyList();
+        }
+        return types.stream().filter(predicate).collect(Collectors.toList());
     }
 
     public static class Apple extends Plant {
@@ -89,13 +126,13 @@ public class FilteringApples {
             this.color = color;
         }
 
-        public Apple(int weight, String color, double height) {
+        Apple(int weight, String color, double height) {
             super(height);
             this.weight = weight;
             this.color = color;
         }
 
-        public Integer getWeight() {
+        Integer getWeight() {
             return weight;
         }
 
@@ -103,7 +140,7 @@ public class FilteringApples {
             this.weight = weight;
         }
 
-        public String getColor() {
+        String getColor() {
             return color;
         }
 
@@ -123,14 +160,14 @@ public class FilteringApples {
     public static abstract class Plant {
         private double height;
 
-        public Plant() {
+        Plant() {
         }
 
-        public Plant(double height) {
+        Plant(double height) {
             this.height = height;
         }
 
-        public double getHeight() {
+        double getHeight() {
             return height;
         }
 
