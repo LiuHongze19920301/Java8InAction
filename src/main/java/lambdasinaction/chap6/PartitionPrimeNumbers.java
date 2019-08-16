@@ -76,9 +76,9 @@ public class PartitionPrimeNumbers {
     public Map<Boolean, List<Integer>> partitionPrimesWithInlineCollector(int n) {
         return Stream.iterate(2, i -> i + 1).limit(n)
                 .collect(
-                        () -> new HashMap<>() {{
-                            put(true, new ArrayList<>());
-                            put(false, new ArrayList<>());
+                        () -> new HashMap<Boolean, List<Integer>>() {{
+                            put(true, new ArrayList<Integer>());
+                            put(false, new ArrayList<Integer>());
                         }},
                         (acc, candidate) -> {
                             acc.get(isPrime(acc.get(true), candidate))

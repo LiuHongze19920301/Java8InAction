@@ -21,6 +21,7 @@ public class GroupingTransactions {
             new Transaction(Currency.EUR, 6800.0));
 
     public static void main(String... args) {
+        System.out.println(System.getProperty("java.util.concurrent.ForkJoinPool.common.parallelism"));
         groupImperatively();
         groupFunctionally();
 
