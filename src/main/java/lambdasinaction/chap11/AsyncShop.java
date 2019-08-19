@@ -1,11 +1,11 @@
 package lambdasinaction.chap11;
 
-import static lambdasinaction.chap11.Util.delay;
-import static lambdasinaction.chap11.Util.format;
-
 import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
+
+import static lambdasinaction.chap11.Util.delay;
+import static lambdasinaction.chap11.Util.format;
 
 public class AsyncShop {
 
@@ -18,18 +18,6 @@ public class AsyncShop {
     }
 
     public Future<Double> getPrice(String product) {
-/*
-        CompletableFuture<Double> futurePrice = new CompletableFuture<>();
-        new Thread( () -> {
-                    try {
-                        double price = calculatePrice(product);
-                        futurePrice.complete(price);
-                    } catch (Exception ex) {
-                        futurePrice.completeExceptionally(ex);
-                    }
-        }).start();
-        return futurePrice;
-*/
         return CompletableFuture.supplyAsync(() -> calculatePrice(product));
     }
 

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public class Util {
@@ -17,7 +18,7 @@ public class Util {
         int delay = 1000;
         //int delay = 500 + RANDOM.nextInt(2000);
         try {
-            Thread.sleep(delay);
+            TimeUnit.MILLISECONDS.sleep(delay);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -40,7 +41,7 @@ public class Util {
         );
 */
         return CompletableFuture.supplyAsync(() -> futures.stream().
-                map(future -> future.join()).
-                collect(Collectors.<T>toList()));
+                map(CompletableFuture::join).
+                collect(Collectors.toList()));
     }
 }

@@ -6,13 +6,13 @@ public class Quote {
     private final double price;
     private final Discount.Code discountCode;
 
-    public Quote(String shopName, double price, Discount.Code discountCode) {
+    private Quote(String shopName, double price, Discount.Code discountCode) {
         this.shopName = shopName;
         this.price = price;
         this.discountCode = discountCode;
     }
 
-    public static Quote parse(String s) {
+    static Quote parse(String s) {
         String[] split = s.split(":");
         String shopName = split[0];
         double price = Double.parseDouble(split[1]);
@@ -20,7 +20,7 @@ public class Quote {
         return new Quote(shopName, price, discountCode);
     }
 
-    public String getShopName() {
+    String getShopName() {
         return shopName;
     }
 
@@ -28,7 +28,7 @@ public class Quote {
         return price;
     }
 
-    public Discount.Code getDiscountCode() {
+    Discount.Code getDiscountCode() {
         return discountCode;
     }
 }
