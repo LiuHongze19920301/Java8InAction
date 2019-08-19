@@ -41,6 +41,30 @@ public class BestPriceFinder {
         return t;
     });
 
+    private final Executor singleThreadPool = Executors.newSingleThreadExecutor(r -> {
+        Thread t = new Thread(r);
+        t.setDaemon(true);
+        return t;
+    });
+
+    private final Executor executorWithTwoThread = Executors.newFixedThreadPool(2, r -> {
+        Thread thread = new Thread(r);
+        thread.setDaemon(true);
+        return thread;
+    });
+
+    private final Executor executorWithThreeThread = Executors.newFixedThreadPool(3, r -> {
+        Thread thread = new Thread(r);
+        thread.setDaemon(true);
+        return thread;
+    });
+
+    private final Executor executorWithThreeThread2 = Executors.newFixedThreadPool(3, r -> {
+        Thread thread = new Thread(r);
+        thread.setDaemon(true);
+        return thread;
+    });
+
     /**
      * 使用串行流获取不同商店的商品价格
      */
@@ -120,10 +144,10 @@ public class BestPriceFinder {
             // is retrieved within the loop. As a result, we now deal with
             // CompletableFuture<String> instances.
             CompletableFuture<String> futurePriceInUSD =
-                    CompletableFuture.supplyAsync(() -> shop.getPrice(product))
+                    CompletableFuture.supplyAsync(() -> shop.getPrice(product), executorWithThreeThread2)
                             .thenCombine(
                                     CompletableFuture.supplyAsync(
-                                            () -> ExchangeService.getRate(Money.EUR, Money.USD)),
+                                            () -> ExchangeService.getRate(Money.EUR, Money.USD), executor),
                                     (price, rate) -> price * rate
                             ).thenApply(price -> shop.getName() + " price is " + price);
             priceFutures.add(futurePriceInUSD);
@@ -141,7 +165,7 @@ public class BestPriceFinder {
                 .map(shop -> CompletableFuture
                         .supplyAsync(() -> shop.getPrice(product), executor)
                         .thenCombine(
-                                CompletableFuture.supplyAsync(() -> ExchangeService.getRate(Money.EUR, Money.USD)),
+                                CompletableFuture.supplyAsync(() -> ExchangeService.getRate(Money.EUR, Money.USD), executor),
                                 (price, rate) -> price * rate)
                         .thenApply(price -> shop.getName() + " price is " + price));
         // However, we should gather the CompletableFutures into a List so that the asynchronous
